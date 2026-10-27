@@ -1,0 +1,818 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindfulMe - Mental Wellness Journal</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7f5;
+    color: #263c35;
+}
+
+header {
+    background: #426b5b;
+    color: white;
+    padding: 22px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 27px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+nav button {
+    border: none;
+    background: transparent;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+nav button:hover,
+nav button.active {
+    background: #315244;
+}
+
+.container {
+    width: 84%;
+    max-width: 1100px;
+    margin: 35px auto;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.hero {
+    background: linear-gradient(135deg, #d8eee1, #f5e8d8);
+    padding: 55px 35px;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 18px;
+}
+
+.hero p {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.primary-btn {
+    background: #426b5b;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.primary-btn:hover {
+    background: #315244;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 13px;
+    box-shadow: 0 4px 15px #0000000b;
+}
+
+.card h3 {
+    margin-bottom: 12px;
+    color: #426b5b;
+}
+
+.card p {
+    line-height: 1.6;
+}
+
+h2.section-title {
+    margin-bottom: 20px;
+}
+
+form,
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 13px;
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin: 15px 0 8px;
+    font-weight: bold;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd8d1;
+    border-radius: 7px;
+    font: inherit;
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.entry {
+    background: white;
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 10px;
+    border-left: 5px solid #7fae93;
+    overflow-wrap: anywhere;
+}
+
+.entry h3 {
+    margin-bottom: 8px;
+}
+
+.entry p {
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.delete-btn {
+    background: #a74343;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.moods {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.mood-btn {
+    background: white;
+    border: 2px solid #d5e2d9;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    min-width: 90px;
+}
+
+.mood-btn.selected {
+    border-color: #426b5b;
+    background: #e0f0e6;
+}
+
+.mood-btn span {
+    display: block;
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.message {
+    margin-top: 15px;
+    color: #426b5b;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #65776d;
+}
+
+.small-text {
+    font-size: 13px;
+    color: #65776d;
+    margin-top: 12px;
+}
+
+@media (max-width: 650px) {
+    header {
+        padding: 20px;
+    }
+
+    .container {
+        width: 92%;
+    }
+
+    .hero {
+        padding: 35px 20px;
+    }
+
+    .hero h2 {
+        font-size: 28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌿 MindfulMe</h1>
+
+    <nav>
+        <button class="active" data-page="home">Home</button>
+        <button data-page="journal">Journal</button>
+        <button data-page="mood">Mood Tracker</button>
+        <button data-page="gratitude">Gratitude</button>
+        <button data-page="resources">Resources</button>
+        <button data-page="insights">Insights</button>
+    </nav>
+</header>
+
+<main class="container">
+
+    <!-- HOME PAGE -->
+    <section id="home" class="page active">
+        <div class="hero">
+            <h2>Your Mind Matters 💚</h2>
+            <p>
+                Welcome to MindfulMe, your personal space to reflect,
+                understand your emotions, practice gratitude, and build
+                healthy mental wellness habits.
+            </p>
+            <button class="primary-btn" onclick="showPage('journal')">
+                Write in Your Journal
+            </button>
+            <button class="primary-btn" onclick="showPage('mood')">
+                Track Your Mood
+            </button>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>📔 Daily Journal</h3>
+                <p>Express your thoughts and reflect on your day.</p>
+            </div>
+
+            <div class="card">
+                <h3>😊 Mood Tracker</h3>
+                <p>Record how you feel and notice patterns over time.</p>
+            </div>
+
+            <div class="card">
+                <h3>🙏 Gratitude</h3>
+                <p>Remember small moments and things you appreciate.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOURNAL PAGE -->
+    <section id="journal" class="page">
+        <h2 class="section-title">📔 My Journal</h2>
+        <p>Write about your day, thoughts, or experiences.</p>
+
+        <form id="journalForm">
+            <label for="journalTitle">Entry title</label>
+            <input id="journalTitle" type="text"
+                   placeholder="Give your entry a title" required>
+
+            <label for="journalText">Your thoughts</label>
+            <textarea id="journalText"
+                      placeholder="Write freely about your day..."
+                      required></textarea>
+
+            <button class="primary-btn" type="submit">Save Entry</button>
+        </form>
+
+        <h2 style="margin-top:30px;">Previous Entries</h2>
+        <div id="journalEntries"></div>
+    </section>
+
+    <!-- MOOD TRACKER PAGE -->
+    <section id="mood" class="page">
+        <h2 class="section-title">😊 Mood Tracker</h2>
+        <p>Choose the mood that best describes how you feel today.</p>
+
+        <div class="moods">
+            <button class="mood-btn" data-mood="Happy">
+                <span>😊</span>Happy
+            </button>
+
+            <button class="mood-btn" data-mood="Calm">
+                <span>😌</span>Calm
+            </button>
+
+            <button class="mood-btn" data-mood="Okay">
+                <span>🙂</span>Okay
+            </button>
+
+            <button class="mood-btn" data-mood="Sad">
+                <span>😔</span>Sad
+            </button>
+
+            <button class="mood-btn" data-mood="Stressed">
+                <span>😣</span>Stressed
+            </button>
+        </div>
+
+        <label for="moodNote">Optional note</label>
+        <textarea id="moodNote"
+                  placeholder="What might be affecting your mood?"></textarea>
+
+        <button class="primary-btn" onclick="saveMood()">
+            Save Today's Mood
+        </button>
+
+        <p id="moodMessage" class="message"></p>
+
+        <h2 style="margin-top:30px;">Mood History</h2>
+        <div id="moodEntries"></div>
+    </section>
+
+    <!-- GRATITUDE PAGE -->
+    <section id="gratitude" class="page">
+        <h2 class="section-title">🙏 Gratitude Journal</h2>
+        <p>Write down something you appreciate today.</p>
+
+        <form id="gratitudeForm">
+            <label for="gratitudeText">Today I am grateful for...</label>
+            <textarea id="gratitudeText"
+                      placeholder="A person, a moment, or something small..."
+                      required></textarea>
+
+            <button class="primary-btn" type="submit">
+                Save Gratitude
+            </button>
+        </form>
+
+        <h2 style="margin-top:30px;">My Gratitude Notes</h2>
+        <div id="gratitudeEntries"></div>
+    </section>
+
+    <!-- RESOURCES PAGE -->
+    <section id="resources" class="page">
+        <h2 class="section-title">🌱 Wellness Resources</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>🌬️ Mindful Breathing</h3>
+                <p>
+                    Sit comfortably and breathe gently. Pay attention to
+                    each breath without forcing it.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🚶 Take a Break</h3>
+                <p>
+                    Step away from your screen, stretch comfortably,
+                    or spend a little time outdoors.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>💬 Talk to Someone</h3>
+                <p>
+                    Sharing your feelings with a trusted friend,
+                    family member, or counselor may help.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🌙 Rest and Routine</h3>
+                <p>
+                    Try to maintain a regular sleep routine and make
+                    time for activities you enjoy.
+                </p>
+            </div>
+        </div>
+
+        <p class="small-text">
+            This website supports personal reflection. It is not a
+            replacement for professional mental health care.
+        </p>
+    </section>
+
+    <!-- INSIGHTS PAGE -->
+    <section id="insights" class="page">
+        <h2 class="section-title">📊 My Insights</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Journal Entries</h3>
+                <p id="journalCount">0 entries</p>
+            </div>
+
+            <div class="card">
+                <h3>Mood Records</h3>
+                <p id="moodCount">0 records</p>
+            </div>
+
+            <div class="card">
+                <h3>Gratitude Notes</h3>
+                <p id="gratitudeCount">0 notes</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Recorded Mood Summary</h3>
+            <div id="moodSummary"></div>
+        </div>
+
+        <div class="panel">
+            <h3>Manage Your Data</h3>
+            <p>
+                Your entries are saved in this browser. Anyone with access
+                to this browser profile may be able to see them.
+            </p>
+            <button class="delete-btn" onclick="clearAllData()">
+                Delete All My Data
+            </button>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>MindfulMe © 2026 | Make time for yourself 💚</p>
+</footer>
+
+<script>
+/*
+  Data is stored as plain text in localStorage.
+  No JSON files or JSON methods are used.
+*/
+
+let selectedMood = "";
+
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(function(page) {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    document.querySelectorAll("nav button").forEach(function(button) {
+        button.classList.toggle(
+            "active",
+            button.dataset.page === pageId
+        );
+    });
+
+    renderAll();
+}
+
+document.querySelectorAll("nav button").forEach(function(button) {
+    button.addEventListener("click", function() {
+        showPage(button.dataset.page);
+    });
+});
+
+// Safely encode text before storing it as a plain-text record.
+function encodeText(value) {
+    return encodeURIComponent(value);
+}
+
+function decodeText(value) {
+    try {
+        return decodeURIComponent(value);
+    } catch (error) {
+        return value;
+    }
+}
+
+// Each record is stored on its own line.
+// Fields within a record are separated by a tab.
+function readRecords(key) {
+    const saved = localStorage.getItem(key);
+
+    if (!saved) {
+        return [];
+    }
+
+    return saved.split("\n").filter(function(line) {
+        return line.length > 0;
+    });
+}
+
+function saveRecords(key, records) {
+    localStorage.setItem(key, records.join("\n"));
+}
+
+function makeRecord(fields) {
+    return fields.map(encodeText).join("\t");
+}
+
+function readRecord(line) {
+    return line.split("\t").map(decodeText);
+}
+
+function getDateTime() {
+    return new Date().toLocaleString();
+}
+
+function addDeleteButton(container, key, records, index) {
+    const button = document.createElement("button");
+    button.className = "delete-btn";
+    button.textContent = "Delete";
+
+    button.addEventListener("click", function() {
+        if (confirm("Delete this entry?")) {
+            records.splice(index, 1);
+            saveRecords(key, records);
+            renderAll();
+        }
+    });
+
+    container.appendChild(button);
+}
+
+// JOURNAL
+const JOURNAL_KEY = "mindfulme_journal_plain";
+const MOOD_KEY = "mindfulme_moods_plain";
+const GRATITUDE_KEY = "mindfulme_gratitude_plain";
+
+document.getElementById("journalForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const title = document.getElementById("journalTitle").value.trim();
+        const text = document.getElementById("journalText").value.trim();
+
+        if (!title || !text) {
+            alert("Please enter a title and your thoughts.");
+            return;
+        }
+
+        const records = readRecords(JOURNAL_KEY);
+        records.unshift(makeRecord([getDateTime(), title, text]));
+        saveRecords(JOURNAL_KEY, records);
+
+        this.reset();
+        renderAll();
+        alert("Your journal entry has been saved!");
+    }
+);
+
+function renderJournal() {
+    const container = document.getElementById("journalEntries");
+    const records = readRecords(JOURNAL_KEY);
+
+    container.replaceChildren();
+
+    if (records.length === 0) {
+        container.textContent = "No journal entries yet.";
+        return;
+    }
+
+    records.forEach(function(record, index) {
+        const fields = readRecord(record);
+        const article = document.createElement("article");
+        article.className = "entry";
+
+        const heading = document.createElement("h3");
+        heading.textContent = fields[1] || "Journal Entry";
+
+        const date = document.createElement("small");
+        date.textContent = fields[0] || "";
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = fields[2] || "";
+
+        article.append(heading, date, paragraph);
+        addDeleteButton(article, JOURNAL_KEY, records, index);
+        container.appendChild(article);
+    });
+}
+
+// MOOD TRACKER
+document.querySelectorAll(".mood-btn").forEach(function(button) {
+    button.addEventListener("click", function() {
+        selectedMood = button.dataset.mood;
+
+        document.querySelectorAll(".mood-btn").forEach(function(item) {
+            item.classList.remove("selected");
+        });
+
+        button.classList.add("selected");
+    });
+});
+
+function saveMood() {
+    if (!selectedMood) {
+        alert("Please choose a mood first.");
+        return;
+    }
+
+    const note = document.getElementById("moodNote").value.trim();
+    const records = readRecords(MOOD_KEY);
+
+    records.unshift(makeRecord([
+        getDateTime(),
+        selectedMood,
+        note
+    ]));
+
+    saveRecords(MOOD_KEY, records);
+
+    document.getElementById("moodNote").value = "";
+    document.getElementById("moodMessage").textContent =
+        "Your mood has been saved 💚";
+
+    selectedMood = "";
+
+    document.querySelectorAll(".mood-btn").forEach(function(button) {
+        button.classList.remove("selected");
+    });
+
+    renderAll();
+}
+
+function renderMoods() {
+    const container = document.getElementById("moodEntries");
+    const records = readRecords(MOOD_KEY);
+
+    container.replaceChildren();
+
+    if (records.length === 0) {
+        container.textContent = "No moods recorded yet.";
+        return;
+    }
+
+    records.forEach(function(record, index) {
+        const fields = readRecord(record);
+        const article = document.createElement("article");
+        article.className = "entry";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "Mood: " + (fields[1] || "");
+
+        const date = document.createElement("small");
+        date.textContent = fields[0] || "";
+
+        const note = document.createElement("p");
+        note.textContent = fields[2] || "No note added.";
+
+        article.append(heading, date, note);
+        addDeleteButton(article, MOOD_KEY, records, index);
+        container.appendChild(article);
+    });
+}
+
+// GRATITUDE
+document.getElementById("gratitudeForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const text = document.getElementById("gratitudeText").value.trim();
+
+        if (!text) {
+            alert("Please write a gratitude note.");
+            return;
+        }
+
+        const records = readRecords(GRATITUDE_KEY);
+        records.unshift(makeRecord([getDateTime(), text]));
+        saveRecords(GRATITUDE_KEY, records);
+
+        this.reset();
+        renderAll();
+        alert("Your gratitude note has been saved!");
+    }
+);
+
+function renderGratitude() {
+    const container = document.getElementById("gratitudeEntries");
+    const records = readRecords(GRATITUDE_KEY);
+
+    container.replaceChildren();
+
+    if (records.length === 0) {
+        container.textContent = "No gratitude notes yet.";
+        return;
+    }
+
+    records.forEach(function(record, index) {
+        const fields = readRecord(record);
+        const article = document.createElement("article");
+        article.className = "entry";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "💚 Something I appreciate";
+
+        const date = document.createElement("small");
+        date.textContent = fields[0] || "";
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = fields[1] || "";
+
+        article.append(heading, date, paragraph);
+        addDeleteButton(article, GRATITUDE_KEY, records, index);
+        container.appendChild(article);
+    });
+}
+
+// INSIGHTS
+function renderInsights() {
+    const journals = readRecords(JOURNAL_KEY);
+    const moods = readRecords(MOOD_KEY);
+    const gratitude = readRecords(GRATITUDE_KEY);
+
+    document.getElementById("journalCount").textContent =
+        journals.length + " entries";
+
+    document.getElementById("moodCount").textContent =
+        moods.length + " records";
+
+    document.getElementById("gratitudeCount").textContent =
+        gratitude.length + " notes";
+
+    const counts = {};
+    moods.forEach(function(record) {
+        const fields = readRecord(record);
+        const mood = fields[1] || "Unknown";
+        counts[mood] = (counts[mood] || 0) + 1;
+    });
+
+    const summary = document.getElementById("moodSummary");
+    summary.replaceChildren();
+
+    if (moods.length === 0) {
+        summary.textContent = "Save your first mood to see your summary.";
+        return;
+    }
+
+    ["Happy", "Calm", "Okay", "Sad", "Stressed"].forEach(function(mood) {
+        const paragraph = document.createElement("p");
+        paragraph.style.margin = "12px 0";
+        paragraph.textContent = mood + ": " + (counts[mood] || 0);
+        summary.appendChild(paragraph);
+    });
+}
+
+function renderAll() {
+    renderJournal();
+    renderMoods();
+    renderGratitude();
+    renderInsights();
+}
+
+function clearAllData() {
+    const confirmed = confirm(
+        "Are you sure you want to permanently delete all your entries?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    localStorage.removeItem(JOURNAL_KEY);
+    localStorage.removeItem(MOOD_KEY);
+    localStorage.removeItem(GRATITUDE_KEY);
+
+    renderAll();
+    alert("Your saved data has been deleted.");
+}
+
+renderAll();
+</script>
+
+</body>
+</html>
